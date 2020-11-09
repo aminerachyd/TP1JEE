@@ -36,6 +36,8 @@ public class Client extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		//TODO : La demande doit être ajoutée à une liste appelée "requests" 
+		// qui est dans le scope application 
 		doGet(request, response);
 	}
 
