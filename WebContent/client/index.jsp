@@ -42,7 +42,7 @@
 
 	<div class="container-contact100">
 		<div class="wrap-contact100">
-			<form class="contact100-form validate-form">
+			<form class="contact100-form validate-form" id="form" method="POST">
 				<span class="contact100-form-title"> CONTACT US </span>
 
 				<div class="wrap-input100 validate-input"
@@ -78,19 +78,12 @@
 				<div class="container-contact100-form-btn">
 					<div class="wrap-contact100-form-btn">
 						<div class="contact100-form-bgbtn"></div>
-						<button class="contact100-form-btn">Send us</button>
+						<input type="submit" class="contact100-form-btn" value="Send us">
 					</div>
 				</div>
 			</form>
 		</div>
 	</div>
-
-	<div>
-		<h2>
-			<c:out value="Test JSTL" />
-		</h2>
-	</div>
-
 
 	<div id="dropDownSelect1"></div>
 
@@ -123,6 +116,5 @@
 
 		gtag('config', 'UA-23581568-13');
 	</script>
-
 </body>
 </html>
