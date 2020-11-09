@@ -51,9 +51,6 @@ public class Client extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO : La demande doit être ajoutée à une liste appelée "requests"
-		// qui est dans le scope application
-
 		String name = request.getParameter("name");
 		String phone = request.getParameter("phone");
 		String email = request.getParameter("email");
@@ -65,11 +62,13 @@ public class Client extends HttpServlet {
 		client.setEmail(email);
 		client.setMessage(message);
 
-		addRequest(client);
-		System.out.println(name + phone + email + message);
+		ArrayList<ClientBean> requests = (ArrayList<ClientBean>) getServletContext().getAttribute("requests");
 
-		ServletContext context = getServletContext();
-		context.setAttribute("requests", this.requests);
+		requests = requests == null ? new ArrayList<ClientBean>() : requests;
+
+		requests.add(client);
+
+		getServletContext().setAttribute("requests", requests);
 	}
 
 }
