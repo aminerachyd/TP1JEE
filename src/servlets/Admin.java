@@ -37,18 +37,25 @@ public class Admin extends HttpServlet {
 	
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// On fait la recherche
-		// On recupere la liste des demandes
+		// Fonction appelée pour obtenir les resultats du filtrage
+		// On fait le filtrage
+		// On recupere la partie du nom à chercher
 		String name = request.getParameter("name");
+		// On recupere la liste des demandes
 		List<ClientBean> requests = (List<ClientBean>) getServletContext()
 						.getAttribute("requests");
 		requests = requests == null ? new ArrayList<ClientBean>() : requests;
 		List<ClientBean> output = new ArrayList<ClientBean>();
 		for (ClientBean req : requests) {
+			// Si le nom de la demande contient la partie qu'on cherche on l'ajoute
+			// à la liste
 			if (req.getName().contains(name))
 				output.add(req);
 		}
+		// On ajoute la liste à la jsp
 		request.setAttribute("values", output);
+		// On renvoie une page jsp qui correspond à l'intérieur du tableau
+		// à afficher
 		getServletContext().getRequestDispatcher("/admin/table.jsp")
 		.forward(request, response);
 	}

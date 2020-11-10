@@ -3,7 +3,6 @@ package servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,16 +17,6 @@ import beans.ClientBean;
 @WebServlet("/Client")
 public class Client extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	private ArrayList<ClientBean> requests = new ArrayList();
-
-	public ArrayList<ClientBean> getRequests() {
-		return requests;
-	}
-
-	private void addRequest(ClientBean request) {
-		requests.add(request);
-	}
 
 	/**
 	 * @see HttpServlet#HttpServlet()

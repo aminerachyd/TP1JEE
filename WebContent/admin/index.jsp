@@ -183,17 +183,21 @@
 	    let errorElement = document.getElementById('error');
 		let bodyElement = document.getElementById('tab-body');
 		function doSearch(event){
+			// Fonction appelée lors qu'un caractère est saisie dans la barre
+			// de recherche
 			let text = event.currentTarget.value;
-			
-			errorElement.innerText = ""
+			errorElement.innerText = "";
+			// Si le texte est assez grand (au moins 3 caracteres) on lance le filtrage
 			if (text.length > 2){
 				askServer(text);
 			}
+			// Sinon s'il n'y a plus de texte dans la barre on recupère toutes les demandes
 			else if (text.length == 0) {
 				askServer("");
 			}
 		}
 		function askServer(text){
+			// Fonction qui permet de recupérer les données aupres du serveur
 			fetch('index',{
 				method: "POST",
 				body: 'name='+text,
