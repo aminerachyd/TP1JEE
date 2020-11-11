@@ -42,7 +42,7 @@
 
 	<div class="container-contact100">
 		<div class="wrap-contact100">
-			<form class="contact100-form validate-form" id="form" method="POST">
+			<form class="contact100-form validate-form" id="form">
 				<span class="contact100-form-title"> CONTACT US </span>
 
 				<div class="wrap-input100 validate-input"
@@ -71,7 +71,7 @@
 
 				<div class="wrap-input100 validate-input"
 					data-validate="Message is required">
-					<textarea class="input100" name="message"
+					<textarea class="input100" name="message" id="message"
 						placeholder="Your message..."></textarea>
 				</div>
 
@@ -82,6 +82,7 @@
 					</div>
 				</div>
 			</form>
+			<span id="info"></span>
 		</div>
 	</div>
 
@@ -104,6 +105,41 @@
 	<!--===============================================================================================-->
 	<script src="client/js/main.js"></script>
 
+	<!-- Script pour controler l'envoi de formulaire -->
+	<script>
+		const form = document.getElementById("form");
+		
+		const info = document.getElementById("info");
+		
+		form.addEventListener("submit", e=>{
+			e.preventDefault();
+			let formData = new FormData();
+					
+			let name = document.getElementById("name").value;
+			let email = document.getElementById("email").value;
+			let phone = document.getElementById("phone").value;
+			let message = document.getElementById("message").value;
+
+
+			
+			const data = "name="+name+"&email="+email+"&phone="+phone+"&message="+message;
+			
+			fetch('Client',{
+				method: "POST",
+				body:data,
+				headers: { 'Content-type': 'application/x-www-form-urlencoded' }
+			  })
+			.then(res=>{
+				info.innerHTML = "Message Sent";
+				setTimeout(() => {
+					info.innerHTML = "";
+				}, 2000);
+			}).catch(err=>{
+				console.log(err);
+				document.getElementById("info").innerHTML = "An error occured";
+			})
+			})
+	</script>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async
 		src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
