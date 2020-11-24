@@ -10,12 +10,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import beans.ClientBean;
+import dao.PersonDAO;
+import entities.Message;
+import entities.Person;
 
 /**
  * Servlet implementation class Admin
  */
-@WebServlet("/admin/index")
+@WebServlet("/admin/list")
 public class Admin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -30,7 +35,25 @@ public class Admin extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// On affiche la page avec les demandes
+		// On recupere les infos dans la base de données
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:/META-INF/applicationContext.xml");
+		PersonDAO personDAO = ctx.getBean(PersonDAO.class);
+		List<Person> persons = personDAO.findAll();
+		
+		// On fait la conversion person -> clientBean (pour l'affichage)
+		List<ClientBean> requests = new ArrayList<ClientBean>();
+		for (Person person : persons) {
+			List<Message> messages = person.getMessages();
+			for (Message message : messages) {
+				requests.add(new ClientBean(person.getName(), person.getEmail(),
+						person.getPhone(), message.getContent()));
+			}
+		}
+		
+		request.setAttribute("requests", requests);
+		ctx.close();
+		
+		// On affiche la page
 		getServletContext().getRequestDispatcher("/admin/index.jsp")
 		.forward(request, response);
 	}
@@ -41,19 +64,24 @@ public class Admin extends HttpServlet {
 		// On fait le filtrage
 		// On recupere la partie du nom à chercher
 		String name = request.getParameter("name");
-		// On recupere la liste des demandes
-		List<ClientBean> requests = (List<ClientBean>) getServletContext()
-						.getAttribute("requests");
-		requests = requests == null ? new ArrayList<ClientBean>() : requests;
-		List<ClientBean> output = new ArrayList<ClientBean>();
-		for (ClientBean req : requests) {
-			// Si le nom de la demande contient la partie qu'on cherche on l'ajoute
-			// à la liste
-			if (req.getName().contains(name))
-				output.add(req);
+		
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:/META-INF/applicationContext.xml");
+		PersonDAO personDAO = ctx.getBean(PersonDAO.class);
+		List<Person> persons = personDAO.findLikeName(name);
+		
+		// On fait la conversion person -> clientBean (pour l'affichage)
+		List<ClientBean> requests = new ArrayList<ClientBean>();
+		for (Person person : persons) {
+			List<Message> messages = person.getMessages();
+			for (Message message : messages) {
+				requests.add(new ClientBean(person.getName(), person.getEmail(),
+						person.getPhone(), message.getContent()));
+			}
 		}
-		// On ajoute la liste à la jsp
-		request.setAttribute("values", output);
+		
+		request.setAttribute("requests", requests);
+		ctx.close();
+		
 		// On renvoie une page jsp qui correspond à l'intérieur du tableau
 		// à afficher
 		getServletContext().getRequestDispatcher("/admin/table.jsp")

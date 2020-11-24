@@ -94,7 +94,7 @@
 									</tr>
 								</thead>
 								<tbody id="tab-body">
-									<c:forEach items="${applicationScope.requests}"
+									<c:forEach items="${requests}"
 										var="requestItem">
 										<tr>
 											<td><c:out value="${requestItem.name}"></c:out></td>
@@ -198,7 +198,7 @@
 		}
 		function askServer(text){
 			// Fonction qui permet de recupérer les données aupres du serveur
-			fetch('index',{
+			fetch('list',{
 				method: "POST",
 				body: 'name='+text,
 				headers: { 'Content-type': 'application/x-www-form-urlencoded' }
